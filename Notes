@@ -1,0 +1,29 @@
+MY SLACK WEBHOOK URL
+https://hooks.slack.com/services/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
+
+PROMETHEUS OPERATOR INSTALLATION
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus prometheus-community/kube-prometheus-stack
+
+ROLLOUT 
+kubectl rollout undo deploy node-deploy --to-revision=1 -n project
+kubectl rollout history deploy node-deploy -n project
+
+KUBE STATE METRICS INSTALLATION
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl get deployment metrics-server -n kube-system
+
+IF CHANGES IN ALERT RULES, RESTART PROMETHUES AND GRAFANA
+kubectl get sts -n prometheus
+kubectl rollout restart statefulset.apps/alertmanager-prometheus-kube-prometheus-alertmanager -n prometheus
+kubectl rollout restart statefulset.apps/prometheus-prometheus-kube-prometheus-prometheus -n prometheus
+
+TO STRESS CPU FOR HPA TEST
+while true
+do
+curl http://localhost:40
+done
+
+helm install --debug --dry-run myproject ./DevOps-Project
+
